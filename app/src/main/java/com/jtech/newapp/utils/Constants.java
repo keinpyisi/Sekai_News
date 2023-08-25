@@ -77,5 +77,7 @@ public class Constants {
     public static final int FASHION = 6;
     public static final int BUSINESS = 7;
     public static final int CULTURE = 8;
+    public static final int SEARCH = 9;
+
 
 }

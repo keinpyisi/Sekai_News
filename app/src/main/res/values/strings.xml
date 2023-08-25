@@ -17,6 +17,7 @@
     <string name="ic_title_fashion">Fashion</string>
     <string name="ic_title_business">Business</string>
     <string name="ic_title_culture">Culture</string>
+    <string name="ic_title_search">Search</string>
 
     <!-- Text to display in the list when there are no news [CHAR LIMIT=NONE] -->
     <string name="no_news">No news found.</string>

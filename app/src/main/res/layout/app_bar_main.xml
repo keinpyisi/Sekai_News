@@ -17,8 +17,9 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@android:color/white"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
+            android:background="@color/cardview_light_background"
+            app:popupTheme="@style/AppTheme.PopupOverlay"
+            app:collapseIcon="@drawable/baseline_chevron_left_24"/>
 
         <!-- TabLayout that provides a horizontal layout to display tabs -->
         <com.google.android.material.tabs.TabLayout

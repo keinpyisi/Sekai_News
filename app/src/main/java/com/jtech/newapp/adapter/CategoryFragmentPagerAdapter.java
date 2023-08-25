@@ -4,6 +4,8 @@ package com.jtech.newapp.adapter;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import android.content.Context;
+import android.os.Bundle;
+
 import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.jtech.newapp.R;
@@ -13,10 +15,13 @@ import com.jtech.newapp.fragment.EnvironmentFragment;
 import com.jtech.newapp.fragment.FashionFragment;
 import com.jtech.newapp.fragment.HomeFragment;
 import com.jtech.newapp.fragment.ScienceFragment;
+import com.jtech.newapp.fragment.SearchFragment;
 import com.jtech.newapp.fragment.SocietyFragment;
 import com.jtech.newapp.fragment.SportFragment;
 import com.jtech.newapp.fragment.WorldFragment;
 import com.jtech.newapp.utils.Constants;
+
+import java.util.ArrayList;
 
 
 /**
@@ -27,6 +32,7 @@ public class CategoryFragmentPagerAdapter extends FragmentPagerAdapter {
 
     /** Context of the app */
     private Context mContext;
+    private ArrayList<String>data;
 
     /**
      * Create a new {@link CategoryFragmentPagerAdapter} object.
@@ -64,6 +70,8 @@ public class CategoryFragmentPagerAdapter extends FragmentPagerAdapter {
                 return new BusinessFragment();
             case Constants.CULTURE:
                 return new CultureFragment();
+            case Constants.SEARCH:
+                return new SearchFragment();
             default:
                 return null;
         }
@@ -74,7 +82,7 @@ public class CategoryFragmentPagerAdapter extends FragmentPagerAdapter {
      */
     @Override
     public int getCount() {
-        return 9;
+        return 10;
     }
 
     /**
@@ -108,10 +116,22 @@ public class CategoryFragmentPagerAdapter extends FragmentPagerAdapter {
             case Constants.BUSINESS:
                 titleResId = R.string.ic_title_business;
                 break;
-            default:
+            case Constants.CULTURE:
                 titleResId = R.string.ic_title_culture;
+                break;
+            case Constants.SEARCH:
+                titleResId= R.string.ic_title_search;
+                break;
+            default:
+                titleResId= R.string.ic_title_home;
                 break;
         }
         return mContext.getString(titleResId);
     }
+    @Override
+    public int getItemPosition(Object object) {
+// POSITION_NONE makes it possible to reload the PagerAdapter
+        return POSITION_NONE;
+    }
+
 }

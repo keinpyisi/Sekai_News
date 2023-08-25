@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import com.jtech.newapp.utils.Constants;
 
@@ -53,7 +54,8 @@ public final class NewsPreferences {
         String fromDate = sharedPrefs.getString(
                 context.getString(R.string.settings_from_date_key),
                 context.getString(R.string.settings_from_date_default));
-
+        String query = sharedPrefs.getString("query","");
+        Log.e("QUERY",query);
         // Parse breaks apart the URI string that is passed into its parameter
         Uri baseUri = Uri.parse(Constants.NEWS_REQUEST_URL);
 
@@ -61,7 +63,7 @@ public final class NewsPreferences {
         Uri.Builder uriBuilder = baseUri.buildUpon();
 
         // Append query parameter and its value. (e.g. the 'show-tag=contributor')
-        uriBuilder.appendQueryParameter(QUERY_PARAM, "");
+        uriBuilder.appendQueryParameter(QUERY_PARAM, query);
         uriBuilder.appendQueryParameter(ORDER_BY_PARAM, orderBy);
         uriBuilder.appendQueryParameter(PAGE_SIZE_PARAM, numOfItems);
         uriBuilder.appendQueryParameter(ORDER_DATE_PARAM, orderDate);

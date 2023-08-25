@@ -2,10 +2,13 @@ package com.jtech.newapp;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
+
+import androidx.core.content.res.ResourcesCompat;
 import androidx.core.view.GravityCompat;
 import androidx.viewpager.widget.ViewPager;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -14,21 +17,29 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.os.CountDownTimer;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.jtech.newapp.adapter.CategoryFragmentPagerAdapter;
 import com.jtech.newapp.utils.Constants;
 import com.jtech.newapp.utils.DatabaseHelper;
+import androidx.appcompat.widget.SearchView;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private ViewPager viewPager;
     private ProgressDialog pd;
+    private  SearchView searchView;
+    CategoryFragmentPagerAdapter pagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +81,7 @@ public class MainActivity extends AppCompatActivity
         onNavigationItemSelected(navigationView.getMenu().getItem(0).setChecked(true));
 
         // Set category fragment pager adapter
-        CategoryFragmentPagerAdapter pagerAdapter =
+        pagerAdapter =
                 new CategoryFragmentPagerAdapter(this, getSupportFragmentManager());
         // Set the pager adapter onto the view pager
         viewPager.setAdapter(pagerAdapter);
@@ -123,9 +134,57 @@ public class MainActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the Options Menu we specified in XML
         getMenuInflater().inflate(R.menu.main, menu);
+        SearchView searchView  =(SearchView) menu.findItem(R.id.search).getActionView();
+        EditText editText = (EditText) searchView.findViewById(androidx.appcompat.R.id.search_src_text);
+        editText.setTextColor(getResources().getColor(R.color.black));
+        editText.setHintTextColor(getResources().getColor(R.color.black));
+        ImageView searchClear = searchView.findViewById(androidx.appcompat.R.id.search_close_btn);
+        searchClear.setImageResource(R.drawable.ic_close);
+
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                // Perform search operation here
+                performSearch(query);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                // Perform search operation as the query text changes
+                performSearch(newText);
+                return true;
+            }
+        });
+        // Handle search cancel button click
+        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                clearSearch();
+                return false;
+            }
+        });
+
         return true;
     }
+    private void performSearch(String data) {
+        // This is where you handle the search query and display the results
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString("query", data.replaceAll("[-+.^:,]",""));
+        editor.commit();
+        pagerAdapter.notifyDataSetChanged();
+        viewPager.setCurrentItem(Constants.SEARCH);
+    }
 
+    private void clearSearch() {
+        // This is where you clear the search query and restore the previous view
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString("query", "");
+        editor.commit();
+    }
     @Override
     // This method is called whenever an item in the options menu is selected.
     public boolean onOptionsItemSelected(MenuItem item) {
